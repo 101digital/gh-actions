@@ -121,7 +121,7 @@ jobs:
     runs-on: self-hosted
     name: sonarqube-scan
     env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONARTOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -141,7 +141,8 @@ jobs:
         run: echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)"
 
       - name: Print env variable
-        run: echo "Sonar secret is $SONAR_TOKEN"
+        run: |
+          echo "SONARTOKEN value is $SONARTOKEN"
 
       - name: SonarQube Scan
         run: |
