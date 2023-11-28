@@ -146,6 +146,7 @@ jobs:
           sonar-scanner \
             -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5 \
             -Dsonar.projectKey="io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}" \
+            -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }}
             -Dsonar.host.url=https://sonarqube.101digital.io \
             -Dsonar.sources=. -Dsonar.java.binaries=. \
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
