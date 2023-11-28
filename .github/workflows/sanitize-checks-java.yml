@@ -117,3 +117,36 @@ jobs:
                 review_id: review.id
               });
             }
+  sonarqube-scan:
+    runs-on: self-hosted
+    name: sonarqube-scan
+    env:
+      TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      #- name: Setup SonarQube
+      #  uses: warchant/setup-sonar-scanner@v7
+
+      - name: Get Repo Name
+        id: extract_repo_name
+        run: echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)"
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5 \
+            -Dsonar.projectKey=${{ steps.extract_repo_name.outputs.repo_name }} \
+            -Dsonar.host.url=https://sonarqube.101digital.io \
+            -Dsonar.sources=. -Dsonar.java.binaries=. \
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
