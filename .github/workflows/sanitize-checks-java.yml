@@ -122,7 +122,6 @@ jobs:
     name: sonarqube-scan
     env:
       TOKEN: ${{ secrets.SONAR_TOKEN }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
