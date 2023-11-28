@@ -121,7 +121,7 @@ jobs:
     runs-on: self-hosted
     name: sonarqube-scan
     env:
-      SONARTOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
 
     steps:
       - name: Checkout code
@@ -142,7 +142,7 @@ jobs:
 
       - name: Print env variable
         run: |
-          echo "SONARTOKEN value is $SONARTOKEN"
+          echo "SONARTOKEN value is $SONAR_TOKEN"
 
       - name: SonarQube Scan
         run: |
