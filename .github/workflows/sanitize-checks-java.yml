@@ -154,7 +154,9 @@ jobs:
       - name: Check Quality Gate Status
         id: check_quality_gate
         run: |
-          SONAR_URL="https://sonarcloud.io/api/qualitygates/project_status?projectKey=io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}"
+          PR_NUM=${{ github.event.pull_request.number }}
+          PROJECT_KEY=io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}
+          SONAR_URL="https://sonarqube.101digital.io/api/qualitygates/project_status?projectKey=$PROJECT_KEY&pullRequest=$PR_NUM"
           QUALITY_GATE_STATUS=$(curl -s -u sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5: "$SONAR_URL" | jq -r '.projectStatus.status')
 
           echo "Quality Gate Status: $QUALITY_GATE_STATUS"
