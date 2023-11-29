@@ -151,3 +151,22 @@ jobs:
             -Dsonar.sources=. -Dsonar.java.binaries=. \
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
             -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+
+      - name: Check Quality Gate Status
+        id: check_quality_gate
+        run: |
+          sleep 20s
+          PR_NUM=${{ github.event.pull_request.number }}
+          PROJECT_KEY=io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}
+          SONAR_URL="https://sonarqube.101digital.io/api/qualitygates/project_status?projectKey=$PROJECT_KEY&pullRequest=$PR_NUM"
+          QUALITY_GATE_STATUS=$(curl -s -u sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5: "$SONAR_URL" | jq -r '.projectStatus.status')
+
+          echo "Quality Gate Status: $QUALITY_GATE_STATUS"
+          echo "::set-output name=quality_gate_status::$QUALITY_GATE_STATUS"
+
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Fail if Quality Gate Failed
+        if: steps.check_quality_gate.outputs.quality_gate_status != 'OK'
+        run: exit 1
