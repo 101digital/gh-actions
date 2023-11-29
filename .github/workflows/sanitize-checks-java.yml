@@ -154,6 +154,7 @@ jobs:
       - name: Check Quality Gate Status
         id: check_quality_gate
         run: |
+          sleep 20s
           PR_NUM=${{ github.event.pull_request.number }}
           PROJECT_KEY=io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}
           SONAR_URL="https://sonarqube.101digital.io/api/qualitygates/project_status?projectKey=$PROJECT_KEY&pullRequest=$PR_NUM"
