@@ -1,5 +1,5 @@
 services:
-- interbank-payment-service
-- payment-service
-- account-opening-service
-- scheduled-payment-service
+- interbank-payment-service-disabled
+- payment-service-disabled
+- account-opening-service-disabled
+- scheduled-payment-service-disabled
