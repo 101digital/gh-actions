@@ -118,7 +118,7 @@ jobs:
               });
             }
   sonarqube-scan:
-    runs-on: self-hosted
+    runs-on: sonar-runner
     name: sonarqube-scan
     env:
       TOKEN: ${{ secrets.SONAR_TOKEN }}
