@@ -138,6 +138,12 @@ jobs:
       - name: Get Repo Name
         id: extract_repo_name
         run: echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)"
+        
+      - name: Read groupId from POM
+        id: extract_group_id
+        run: |
+          groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
+          echo "::set-output name=group_id::$groupId"
 
       - name: SonarQube Scan
         env:
@@ -145,7 +151,7 @@ jobs:
         run: |
           sonar-scanner \
             -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5 \
-            -Dsonar.projectKey="io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}" \
+            -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
             -Dsonar.sources=. -Dsonar.java.binaries=. \
@@ -157,7 +163,7 @@ jobs:
         run: |
           sleep 20s
           PR_NUM=${{ github.event.pull_request.number }}
-          PROJECT_KEY=io.marketplace.services:${{ steps.extract_repo_name.outputs.repo_name }}
+          PROJECT_KEY=${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}
           SONAR_URL="https://sonarqube.101digital.io/api/qualitygates/project_status?projectKey=$PROJECT_KEY&pullRequest=$PR_NUM"
           QUALITY_GATE_STATUS=$(curl -s -u sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5: "$SONAR_URL" | jq -r '.projectStatus.status')
 
