@@ -155,6 +155,7 @@ jobs:
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
+            -Dsonar.sources=. -Dsonar.java.binaries=. \
             -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
             -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} \
             -Dsonar.scm.disabled=true sonar:sonar
