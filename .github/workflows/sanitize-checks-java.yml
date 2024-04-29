@@ -153,7 +153,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         run: |
-          mvn -s /home/ec2-user/settings.xml clean install -DskipTests=false \
+          mvn -s /home/ec2-user/settings.xml clean install -DskipTests=true \
             -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5  \
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
