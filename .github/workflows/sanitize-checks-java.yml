@@ -154,7 +154,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn -s /home/ec2-user/settings.xml \
-            -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5  \
+            -Dsonar.login="${{ secrets.SONAR_TOKEN }}"  \
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
