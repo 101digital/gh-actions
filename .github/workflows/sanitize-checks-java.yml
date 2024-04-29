@@ -149,14 +149,14 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner \
-            -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5 \
+          mvn -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5  \
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
-            -Dsonar.sources=. -Dsonar.java.binaries=. \
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
-            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
+            -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} \
+            -Dsonar.scm.disabled=true sonar:sonar
 
       - name: Check Quality Gate Status
         id: check_quality_gate
