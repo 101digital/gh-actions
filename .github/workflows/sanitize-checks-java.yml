@@ -145,6 +145,10 @@ jobs:
           groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
           echo "::set-output name=group_id::$groupId"
 
+      - name: Application build
+        run: |
+          mvn -s /home/ec2-user/settings.xml  clean install -DskipTests=true 
+          
       - name: SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
