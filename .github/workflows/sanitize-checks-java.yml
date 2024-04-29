@@ -145,15 +145,15 @@ jobs:
           groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
           echo "::set-output name=group_id::$groupId"
 
-      - name: Application build
-        run: |
-          mvn -s /home/ec2-user/settings.xml  clean install -DskipTests=true 
+      #- name: Application build
+      #  run: |
+      #    mvn -s /home/ec2-user/settings.xml  clean install -DskipTests=true 
           
       - name: SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -s /home/ec2-user/settings.xml \
+          mvn -s /home/ec2-user/settings.xml clean install -DskipTests=true \
             -Dsonar.login="${{ secrets.SONAR_TOKEN }}"  \
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
