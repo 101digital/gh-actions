@@ -151,10 +151,10 @@ jobs:
           
       - name: SonarQube Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         run: |
           mvn -s /home/ec2-user/settings.xml clean install -DskipTests=false \
-            -Dsonar.login="${{ secrets.SONARQUBE_TOKEN }}"  \
+            -Dsonar.login=${{ SONAR_TOKEN }}  \
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
