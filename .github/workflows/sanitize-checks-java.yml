@@ -136,7 +136,9 @@ jobs:
         #echo "::set-output name=group_id::$groupId"
 
       - name: clean folder
-        run: rm -rf ${{ steps.extract_repo_name.outputs.repo_name }}
+        run: |
+          pwd
+          rm -rf ${{ steps.extract_repo_name.outputs.repo_name }}
         
       - name: Checkout code
         uses: actions/checkout@v3
