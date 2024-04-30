@@ -138,7 +138,7 @@ jobs:
       - name: clean folder
         run: |
           pwd
-          rm -rf ${{ steps.extract_repo_name.outputs.repo_name }}
+          rm -rf ../${{ steps.extract_repo_name.outputs.repo_name }}
         
       - name: Checkout code
         uses: actions/checkout@v3
@@ -165,6 +165,7 @@ jobs:
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
+            -Dsonar.java.projectBaseDir=./ \
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
             -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
             -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} 
