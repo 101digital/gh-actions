@@ -123,6 +123,21 @@ jobs:
     env:
       SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
     steps:
+      - name: Get Repo Name
+        id: extract_repo_name
+        run: echo "repo_name=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)" >> $GITHUB_OUTPUT
+        #run: echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)"
+        
+      - name: Read groupId from POM
+        id: extract_group_id
+        run: |
+          groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
+          echo "group_id=$groupId" >> $GITHUB_OUTPUT
+        #echo "::set-output name=group_id::$groupId"
+
+      - name: clean folder
+        run: echo ${{ steps.extract_repo_name.outputs.repo_name }}
+        
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -135,17 +150,7 @@ jobs:
       #- name: Setup SonarQube
       #  uses: warchant/setup-sonar-scanner@v7
 
-      - name: Get Repo Name
-        id: extract_repo_name
-        run: echo "repo_name=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)" >> $GITHUB_OUTPUT
-        #run: echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)"
-        
-      - name: Read groupId from POM
-        id: extract_group_id
-        run: |
-          groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
-          echo "group_id=$groupId" >> $GITHUB_OUTPUT
-        #echo "::set-output name=group_id::$groupId"
+
 
       - name: Application build
         run: mvn -s /home/ec2-user/settings.xml  clean install -DskipTests=true
