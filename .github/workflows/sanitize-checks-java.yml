@@ -124,7 +124,7 @@ jobs:
       TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up JDK
         uses: actions/setup-java@v2
@@ -153,15 +153,14 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         run: |
-          mvn clean && mvn -s /home/ec2-user/settings.xml clean install -DskipTests=true \
+          mvn clean && mvn -s /home/ec2-user/settings.xml clean install -DskipTests=true && mvn -s /home/ec2-user/settings.xml sonar:sonar \
             -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5  \
             -Dsonar.projectKey="${{ steps.extract_group_id.outputs.group_id }}:${{ steps.extract_repo_name.outputs.repo_name }}" \
             -Dsonar.projectName=${{ steps.extract_repo_name.outputs.repo_name }} \
             -Dsonar.host.url=https://sonarqube.101digital.io \
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
             -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
-            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} \
-            -Dsonar.scm.disabled=true sonar:sonar
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
 
       - name: Check Quality Gate Status
         id: check_quality_gate
