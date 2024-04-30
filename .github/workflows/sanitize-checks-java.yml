@@ -134,13 +134,6 @@ jobs:
           rm -rf ../${{ steps.extract_repo_name.outputs.repo_name }}
           mkdir ../${{ steps.extract_repo_name.outputs.repo_name }}
 
-      - name: Read groupId from POM
-        id: extract_group_id
-        run: |
-          groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
-          echo "group_id=$groupId" >> $GITHUB_OUTPUT
-        #echo "::set-output name=group_id::$groupId"
-        
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -149,6 +142,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Read groupId from POM
+        id: extract_group_id
+        run: |
+          groupId=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='groupId']/text()" pom.xml)
+          echo "group_id=$groupId" >> $GITHUB_OUTPUT
+        #echo "::set-output name=group_id::$groupId"
 
       #- name: Setup SonarQube
       #  uses: warchant/setup-sonar-scanner@v7
