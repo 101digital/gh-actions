@@ -160,7 +160,8 @@ jobs:
             -Dsonar.host.url=https://sonarqube.101digital.io \
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
             -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
-            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} \
+            -Pintegration-tests
 
       - name: Check Quality Gate Status
         id: check_quality_gate
