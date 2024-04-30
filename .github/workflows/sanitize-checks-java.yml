@@ -121,7 +121,6 @@ jobs:
     runs-on: sonar-runner
     name: sonarqube-scan
     env:
-      TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
     steps:
       - name: Checkout code
@@ -149,12 +148,12 @@ jobs:
         #echo "::set-output name=group_id::$groupId"
 
       - name: Application build
-        run: |
-          mvn -s /home/ec2-user/settings.xml  clean install -DskipTests=true 
+        run: mvn -s /home/ec2-user/settings.xml  clean install -DskipTests=true
+
+      - name: ls -la
+        run: ls -la
           
       - name: SonarQube Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         run: |
           mvn -s /home/ec2-user/settings.xml sonar:sonar \
             -Dsonar.login=sqa_6ccf9076e3232d26d59697d340651f99b0ce5bf5  \
