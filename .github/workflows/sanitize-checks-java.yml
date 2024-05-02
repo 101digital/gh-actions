@@ -130,15 +130,11 @@ jobs:
 
       - name: clean folder
         run: |
-          pwd
           rm -rf ../${{ steps.extract_repo_name.outputs.repo_name }}
           mkdir ../${{ steps.extract_repo_name.outputs.repo_name }}
 
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: ls -la
-        run: ls -la
 
       - name: Set up JDK
         uses: actions/setup-java@v2
